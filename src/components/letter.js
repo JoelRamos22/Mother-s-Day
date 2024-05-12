@@ -10,12 +10,14 @@ export class myLetter extends LitElement {
         this.classContainer = "container_options"
         this.classButonClose = "buton_close"
         this.classButonOpen = "buton_open"
+        this.classCupon = "cupon"
     }
     static properties = {
         containerClass: {typeof: String}, letterClass: {typeof: String}, paperClass: {typeof: String}, coverClass: {typeof: String},
         classContainer: {typeof: String},
         classButonOpen: {typeof: String},
-        classButonClose: {typeof: String}
+        classButonClose: {typeof: String},
+        classCupon: {typeof: String}
     }
     static styles = css`
         * {
@@ -43,6 +45,7 @@ export class myLetter extends LitElement {
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            height: 40%;
         }
         .letter {
             position: absolute;
@@ -59,18 +62,25 @@ export class myLetter extends LitElement {
             border-right: 200px solid transparent;
             transform-origin: top;
             transform: rotate(180deg);
-            transition: transform .75s;
+            transition: transform 0.001s
         }
         .paper {
+            display: flex;  
+            align-items: center;
+            flex-direction: column;
+            position: absolute;
             height: 250px;
             width: 400px; 
-            background-color: var(--color-page)
+            background-color: var(--color-page);
+            transition: transform 0.1s
         }
+        
         .container_options {
+            position: relative;
             display: flex;
             flex-direction: row; 
             justify-content: space-around;
-            gap: 20px; 
+            gap: 30px; 
             width: 400px;
         }
         .buton_open {
@@ -94,18 +104,37 @@ export class myLetter extends LitElement {
             font-weight: 700;
             cursor: pointer;
         }
-
     `
+    openLetter() {
+        const cover = this.shadowRoot.querySelector(`.${this.coverClass}`);
+        const paper = this.shadowRoot.querySelector(`.${this.paperClass}`);
+        cover.style.transform = "rotate(180deg)";
+        paper.style.top = "-150px";
+        paper.style.visibility = "visible"
+
+    }
+    closeLetter() {
+        const cover = this.shadowRoot.querySelector(`.${this.coverClass}`);
+        const paper = this.shadowRoot.querySelector(`.${this.paperClass}`);
+        cover.style.transform = "rotate(0deg)"; 
+        paper.style.top = "0"
+        paper.style.visibility = "hidden"
+
+    }
     render () {
         return html`
             <div class="${this.containerClass}">
                 <div class="${this.coverClass}"></div>
-                <div class="${this.paperClass}"> lorem impuasjkdaskdjaksdljkasjkl</div>
+                <div class="${this.paperClass}">
+                    <h2>¡Feliz dia de la madre ❤️!</h2>
+                    <h3>Te amo mami</h3>
+                    <h3>🍔 Con cupon incluido para ir a comer 🍔</h3>
+                </div>
                 <div class="${this.letterClass}"></div>
             </div>
             <div class="${this.classContainer}">
-                <button class="${this.classButonOpen}">Abrir</button>
-                <button class="${this.classButonClose}">Cerrar</button>
+                <button class="${this.classButonOpen}" @click="${this.openLetter}">Abrir</button>
+                <button class="${this.classButonClose}" @click="${this.closeLetter}">Cerrar</button>
             </div>
         `
     }
